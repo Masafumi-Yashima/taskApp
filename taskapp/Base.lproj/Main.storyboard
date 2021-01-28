@@ -56,10 +56,15 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="gIH-xJ-pEp">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="b0k-Ty-7Eo"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="b0k-Ty-7Eo">
+                            <connections>
+                                <segue destination="mvj-Hk-qfv" kind="show" id="VFD-K3-bBx"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="uCi-QN-56y" id="NJA-ng-uPK"/>
+                        <segue destination="mvj-Hk-qfv" kind="show" identifier="cellSegue" id="4nK-0l-rbL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -76,6 +81,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="Ycj-lA-gBZ"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Gzi-9H-BCS"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ewv-ef-rbQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -100,4 +106,7 @@
             <point key="canvasLocation" x="137.68115942028987" y="129.91071428571428"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="VFD-K3-bBx"/>
+    </inferredMetricsTieBreakers>
 </document>
