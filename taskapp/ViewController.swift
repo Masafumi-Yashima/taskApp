@@ -30,13 +30,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     //データの数(=cell数)を返すメソッド
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        //データの配列taskArrayの数を返す
+        return taskArray.count
     }
     
     //各セルの内容を返すメソッド
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //再利用可能なセルを取得する
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
+        //Cellに値を設定す
+        let task = taskArray[indexPath.row]
+        cell.textLabel?.text = task.title
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        
+        let dateString:String = formatter.string(from: task.date)
+        cell.detailTextLabel?.text = dateString
+        
         return cell
     }
     
@@ -52,6 +64,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //Deleteボタンが押された時に呼ばれるメソッド
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            //データベースから削除する
+            try! realm.write{
+                self.realm.delete(self.taskArray[indexPath.row])
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
     }
 
 
