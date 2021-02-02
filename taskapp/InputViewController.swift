@@ -24,6 +24,7 @@ class InputViewController: UIViewController {
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKyeboard))
         self.view.addGestureRecognizer(tapGesture)
         
+        //タスク一覧画面から遷移してきたときに受け取ったタスクの情報をUIに反映させる
         titleTextField.text = task.title
         contentsTextView.text = task.contents
         dataPicker.date = task.date
@@ -31,6 +32,7 @@ class InputViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //タスク一覧画面へ戻る時に、UIに入力された値をデータベースに保存する
     override func viewWillDisappear(_ animated: Bool) {
         try! realm.write {
             self.task.title = self.titleTextField.text!
@@ -42,6 +44,7 @@ class InputViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
         
+    //ユーザの入力の利便性を高めるために画面の背景をタップしたらキーボードを閉じる
     @objc func dismissKyeboard() {
         //キーボードを閉じる
         view.endEditing(true)
