@@ -17,7 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         //ユーザーに通知の許可を求める
+        //UNUserNortificationCenterのインスタンス取得（インスタンスは直接生成しない）
         let center = UNUserNotificationCenter.current()
+        //requestAuthorizationで承認をリクエスト
         center.requestAuthorization(options: [UNAuthorizationOptions.alert,UNAuthorizationOptions.sound]) {
             (granted, error) in
         }
