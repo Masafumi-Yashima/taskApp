@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import UserNotifications
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
@@ -59,17 +60,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //セルが削除が可能なことを伝えるメソッド
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return.delete
+        return UITableViewCell.EditingStyle.delete
     }
     
     //Deleteボタンが押された時に呼ばれるメソッド
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
+        if editingStyle == UITableViewCell.EditingStyle.delete{
+            //削除するタスクを取得する
+            let task = self.taskArray[indexPath.row]
+            
+            //ローカル通知をキャンセルする
+            let center = UNUserNotificationCenter.current()
+            center.removePendingNotificationRequests(withIdentifiers: [String(task.id)])
+            
             //データベースから削除する
             try! realm.write{
-                self.realm.delete(self.taskArray[indexPath.row])
+                self.realm.delete(task)
                 tableView.deleteRows(at: [indexPath], with: .fade)
             }
+            
+            //未通知のローカル通知一覧をログ出力
+            center.getPendingNotificationRequests{(requests:[UNNotificationRequest]) in
+                for request in requests{
+                    print("/---------------")
+                    print(request)
+                    print("---------------/")
+                }
+            }
+            
         }
     }
     

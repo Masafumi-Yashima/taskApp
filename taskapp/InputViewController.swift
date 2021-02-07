@@ -55,23 +55,28 @@ class InputViewController: UIViewController {
     
     //タスクのローカル通知を登録する
     func setNortification(task:Task){
+        //UNMutableNortificationContentインスタンス取得で編集可能なコンテンツの設定
         let content = UNMutableNotificationContent()
         //タイトルと内容を設定（中身がない場合メッセージなしで音だけの通知になるので「(xxなし)」を表示する）
         if task.title == "" {
-            content.title = "(タイトルなし)"
+            content.title = "(no title)"
         } else {
             content.title = task.title
         }
         if task.contents == "" {
-            content.body = "(内容なし)"
+            content.body = "(no content)"
         } else {
             content.body = task.contents
         }
         content.sound = UNNotificationSound.default
         
         //ローカル通知が発動するtrigger(日付マッチ)を作成
+        //Calender.currentで現在の日付を取得
         let calender = Calendar.current
         let dateComponents = calender.dateComponents([.year, .month, .day, .hour, .minute], from: task.date)
+        //UNCalendarNortificationTriggerクラスのインスタンスを取得
+        //特定の日時に通知が配信されるように設定（ここではdateComponent）
+        //dateMatchingにはDateComponentクラスが入る
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         
         // identifier, content, triggerからローカル通知を作成（identifierが同じだとローカル通知を上書き保存）
@@ -89,7 +94,8 @@ class InputViewController: UIViewController {
             (requests: [UNNotificationRequest]) in
             for request in requests {
                 print("/---------------")
-                print(request)
+                print(request.content)
+                //print(request)
                 print("---------------/")
             }
         })
