@@ -55,6 +55,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //各セルを選択した時に実行されるメソッド
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //optional func performSegue(withIdentifier identifier: NSStoryboardSegue.Identifier,sender: Any?)
+        //指定されたSegueを実行する
         performSegue(withIdentifier: "cellSegue", sender: nil)
     }
     
@@ -94,17 +96,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //Segueで画面遷移する時に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //segueから遷移先のInputViewControllerを取得
         let inputViewController:InputViewController = segue.destination as! InputViewController
         
+        //ViewControllerを押した時
         if segue.identifier == "cellSegue" {
+            //タップしたtableViewのCellの行番号を取得
             let indexPath = self.tableView.indexPathForSelectedRow
+            //取得した行のtaskArry配列をtaskとして遷移先に渡す
             inputViewController.task = taskArray[indexPath!.row]
-        } else {
+        }
+        //+ボタンをタップした時
+        else {
+            //新しいインスタンスを取得
             let task = Task()
-            
+            //データベースのデータを取得
             let allTasks = realm.objects(Task.self)
+            //allTasks.count=0の時、つまり、タスク画面に何もない時はスルーして、task.id=0になるのか確認する！！
             if allTasks.count != 0 {
-                task.id = allTasks.max(ofProperty: "id")! + 1
+                task.id = allTasks.max(ofProperty: "id")! + 1//この書き方は？
             }
             
             inputViewController.task = task

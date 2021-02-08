@@ -12,6 +12,7 @@ import UserNotifications
 
 class InputViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var categoryTextField: UITextField!    
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var dataPicker: UIDatePicker!
     
@@ -27,6 +28,7 @@ class InputViewController: UIViewController {
         
         //タスク一覧画面から遷移してきたときに受け取ったタスクの情報をUIに反映させる
         titleTextField.text = task.title
+        categoryTextField.text = task.category
         contentsTextView.text = task.contents
         dataPicker.date = task.date
         
@@ -38,6 +40,7 @@ class InputViewController: UIViewController {
         try! realm.write {
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
+            self.task.category = self.categoryTextField.text!
             self.task.date = self.dataPicker.date
             self.realm.add(self.task, update: .modified)
         }
