@@ -84,6 +84,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 for request in requests{
                     print("/---------------")
                     print(request)
+                    print("ローカル通知削除")
                     print("---------------/")
                 }
             }
