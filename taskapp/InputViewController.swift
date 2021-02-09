@@ -60,11 +60,16 @@ class InputViewController: UIViewController {
     func setNortification(task:Task){
         //UNMutableNortificationContentインスタンス取得で編集可能なコンテンツの設定
         let content = UNMutableNotificationContent()
-        //タイトルと内容を設定（中身がない場合メッセージなしで音だけの通知になるので「(xxなし)」を表示する）
+        //タイトルとサブタイトルと内容を設定（中身がない場合メッセージなしで音だけの通知になるので「(xxなし)」を表示する）
         if task.title == "" {
             content.title = "(no title)"
         } else {
             content.title = task.title
+        }
+        if task.category == "" {
+            content.subtitle = "(no category)"
+        } else {
+            content.subtitle = task.category
         }
         if task.contents == "" {
             content.body = "(no content)"
@@ -93,6 +98,7 @@ class InputViewController: UIViewController {
         }
         
         // 未通知のローカル通知一覧をログ出力
+        //保留中の通知を取得する
         center.getPendingNotificationRequests(completionHandler: {
             (requests: [UNNotificationRequest]) in
             for request in requests {

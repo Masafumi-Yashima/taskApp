@@ -12,6 +12,7 @@ import UserNotifications
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     //Realmインスタンスを取得する
     let realm = try! Realm()
