@@ -10,12 +10,15 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
     //Realmインスタンスを取得する
     let realm = try! Realm()
+    
+    //検索バーのテキスト
+    //let searchtext: String
     
     //DB内のタスクが格納されるリスト
     //日付の近い順でソート：昇順
@@ -28,6 +31,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
+        
+        //tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
 
     //データの数(=cell数)を返すメソッド
@@ -43,13 +49,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //Cellに値を設定す
         let task = taskArray[indexPath.row]
-        cell.textLabel?.text = task.title
+        cell.textLabel?.text = task.category + " , " + task.title
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         
-        let dateString:String = formatter.string(from: task.date)
-        cell.detailTextLabel?.text = dateString
+        //let dateString:String = formatter.string(from: task.date)
+        //cell.detailTextLabel?.text = dateString
+        cell.detailTextLabel?.text = searchBar.text
         
         return cell
     }
@@ -117,6 +124,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if allTasks.count != 0 {
                 task.id = allTasks.max(ofProperty: "id")! + 1//この書き方は？
             }
+            print (task.id)
             
             inputViewController.task = task
             
@@ -128,5 +136,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
+    
+    //UISearchBarのフィールド内をタップするとキーボードが表示される
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        //検索ボタンを押した時にキーボードを消す
+        searchBar.resignFirstResponder()
+        //serchbarのtextを取得（nillでないときserchbarを取得）
+        guard let searchtext = searchBar.text else{
+            //nillの時処理終了
+            return
+        }
+        //検索処理
+        taskArray = try! Realm().objects(Task.self).filter("category == %@",searchtext)
+        tableView.reloadData()
+    }
+    
 }
 
