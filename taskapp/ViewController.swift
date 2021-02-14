@@ -18,7 +18,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let realm = try! Realm()
     
     //検索バーのテキスト
-    //let searchtext: String
+    //let searchtext: String = ""
     
     //DB内のタスクが格納されるリスト
     //日付の近い順でソート：昇順
@@ -54,9 +54,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         
-        //let dateString:String = formatter.string(from: task.date)
-        //cell.detailTextLabel?.text = dateString
-        cell.detailTextLabel?.text = searchBar.text
+        let dateString:String = formatter.string(from: task.date)
+        cell.detailTextLabel?.text = dateString
         
         return cell
     }
@@ -120,9 +119,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             let task = Task()
             //データベースのデータを取得
             let allTasks = realm.objects(Task.self)
-            //allTasks.count=0の時、つまり、タスク画面に何もない時はスルーして、task.id=0になるのか確認する！！
             if allTasks.count != 0 {
-                task.id = allTasks.max(ofProperty: "id")! + 1//この書き方は？
+                task.id = allTasks.max(ofProperty: "id")! + 1
             }
             print (task.id)
             
@@ -148,6 +146,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         //検索処理
         taskArray = try! Realm().objects(Task.self).filter("category == %@",searchtext)
+        tableView.reloadData()
+    }
+    
+    //searchBarのテキストが変更された時の処理
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
         tableView.reloadData()
     }
     

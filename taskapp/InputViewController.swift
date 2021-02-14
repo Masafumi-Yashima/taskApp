@@ -38,9 +38,21 @@ class InputViewController: UIViewController {
     //タスク一覧画面へ戻る時に、UIに入力された値をデータベースに保存する
     override func viewWillDisappear(_ animated: Bool) {
         try! realm.write {
-            self.task.title = self.titleTextField.text!
-            self.task.contents = self.contentsTextView.text
-            self.task.category = self.categoryTextField.text!
+            if self.categoryTextField.text! == ""{
+                self.task.category = "no category"
+            }else{
+                self.task.category = self.categoryTextField.text!
+            }
+            if self.titleTextField.text! == ""{
+                self.task.title = "no title"
+            }else{
+                self.task.title = self.titleTextField.text!
+            }
+            if self.contentsTextView.text == ""{
+                self.task.contents = "no contents"
+            }else{
+                self.task.contents = self.contentsTextView.text
+            }
             self.task.date = self.dataPicker.date
             self.realm.add(self.task, update: .modified)
         }
