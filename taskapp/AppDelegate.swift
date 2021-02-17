@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     // アプリがフォアグラウンドの時に通知を受け取ると呼ばれるメソッド
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert,.sound])
+        completionHandler([.list,.banner,.sound])
     }
     
     // MARK: UISceneSession Lifecycle
